@@ -1,15 +1,19 @@
+import io
+from contextlib import redirect_stdout
 from random import choice as rand
 import text_processor
 import descriptions
+import nltk
 import os
 
 tag_names = {'NN': 'Singular Noun'}  # dictionary with the names of each tag that we want to show the user
+tag_examples = None
 
 
 def run():
+    text_processor.load_tagger()
+    make_tag_examples()
     print("Welcome! This program can generate mad libs for you by replacing words in a passage.")
-    print("Please wait... ")
-    # text_processor.train()
     choice = ''
     mad_libs = text_processor.MadLibs()
     while not choice.isnumeric() or choice == '' or int(choice) not in range(3):
@@ -36,7 +40,7 @@ def choose_passage():
         # print number, name of file, and first 50 characters of file
         print(i, files[i], '\t', repr(open(os.path.join('passages', files[i]), 'r').read()[:50]), '...')
     choice = ''
-    while (not choice.isnumeric() or choice == '') or int(choice) not in range(len(files)):
+    while not choice.isnumeric() or choice == '' or int(choice) not in range(len(files)):
         choice = input('Please enter the number for the passage of your choice: ')
     return open(os.path.join('passages', files[int(choice)]), 'r').read()
 
@@ -55,12 +59,23 @@ def enter_words(tags):
         print(tag_names[tag], end=': ')
         user_input = input()
         while user_input == 'h':
-            print(tag_names[tag], end=': ')
-
-            # to do: print helpful description
-
+            print('Examples of', tag_names[tag], end=': ')
+            print(text_processor.tag_examples_dict[tag])
             user_input = input()
         words.append(user_input)
+
+
+def make_tag_examples():
+    tags = text_processor.tags_to_replace
+    for t in tags:
+        if t not in text_processor.tag_examples_dict:
+            f = io.StringIO()
+            with redirect_stdout(f):
+                nltk.help.upenn_tagset(t)
+            help_output = f.getvalue()
+            index_start = help_output.find('    ') + 4
+            index_end = help_output.find('    ', index_start) - 1
+            text_processor.tag_examples_dict[t] = help_output[index_start:index_end]
 
 
 if __name__ == '__main__':
