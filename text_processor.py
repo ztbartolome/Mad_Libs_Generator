@@ -8,7 +8,8 @@ from pickle import dump, load
 
 # put the tags of replaceable words here
 tags_to_replace = {'CD', 'JJ', 'JJR', 'JJS', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBR', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}
-tag_examples_dict = {'VB-T': 'examples of transitive verbs', 'VB-IT': 'examples of intransitive verbs'}
+tag_examples = dict()
+tag_names = dict()
 verb_tags = {'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}
 tags_to_replace.update({tag + '-T' for tag in verb_tags})
 tags_to_replace.update({tag + '-IT' for tag in verb_tags})
@@ -42,6 +43,7 @@ class MadLibs(object):
         self.raw = None    # may be unnecessary idk
         self.tagged_tokens = None
         self.word_replacements = {}  # will be a dictionary of the form {(word, tag): replacement}
+        self.replaced_tokens = None
 
     def tag_passage(self):
         """Tag the tokens in the passage"""
@@ -66,10 +68,12 @@ class MadLibs(object):
         for key in self.word_replacements:
             self.word_replacements[key] = replacements[i]
             i += 1
-        for token in self.tagged_tokens():
-            if token in self.word_replacements:
-                # todo: replace the word with self.word_replacements[token]
-                pass
+        for orig, tag in self.tagged_tokens:
+            if (orig, tag) in self.word_replacements.keys():
+                self.replaced_tokens.append(self.word_replacements[(orig, tag)])
+            else:
+                self.replaced_tokens.append(orig)
+        return self.replaced_tokens
 
     def determine_transitive(self):
         """Adds '-T' or '-IT' to the end of each verb tag depending on whether it is transitive or intransitive"""

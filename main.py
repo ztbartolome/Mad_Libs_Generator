@@ -6,9 +6,6 @@ import descriptions
 import nltk
 import os
 
-tag_names = {'NN': 'Singular Noun'}  # dictionary with the names of each tag that we want to show the user
-tag_examples = None
-
 
 def run():
     text_processor.load_tagger()
@@ -56,11 +53,11 @@ def enter_words(tags):
     words = []
     print("Please enter a word for each prompt, or enter 'h' for help")
     for tag in tags:
-        print(tag_names[tag], end=': ')
+        print(text_processor.tag_names[tag], end=': ')
         user_input = input()
         while user_input == 'h':
-            print('Examples of', tag_names[tag], end=': ')
-            print(text_processor.tag_examples_dict[tag])
+            print('Examples of', text_processor.tag_names[tag], end=': ')
+            print(text_processor.tag_examples[tag])
             user_input = input()
         words.append(user_input)
 
@@ -68,14 +65,26 @@ def enter_words(tags):
 def make_tag_examples():
     tags = text_processor.tags_to_replace
     for t in tags:
-        if t not in text_processor.tag_examples_dict:
-            f = io.StringIO()
-            with redirect_stdout(f):
-                nltk.help.upenn_tagset(t)
-            help_output = f.getvalue()
-            index_start = help_output.find('    ') + 4
-            index_end = help_output.find('    ', index_start) - 1
-            text_processor.tag_examples_dict[t] = help_output[index_start:index_end]
+        if t.find('-') > -1:
+            t_pref = t[:t.find('-')]
+            t_suff = t[t.find('-') + 1:]
+        else:
+            t_pref = t
+            t_suff = ''
+        f = io.StringIO()
+        with redirect_stdout(f):
+            nltk.help.upenn_tagset(t_pref)
+        help_output = f.getvalue()
+        ex_start = help_output.find('    ') + 4
+        ex_end = help_output.find('\n', ex_start)
+        name_start = help_output.find(': ') + 2
+        name_end = help_output.find('\n')
+        text_processor.tag_examples[t] = help_output[ex_start:ex_end]
+        text_processor.tag_names[t] = help_output[name_start:name_end]
+        if t_suff == 'T':
+            text_processor.tag_names[t] += ' (transitive)'
+        elif t_suff == 'IT':
+            text_processor.tag_names[t] += ' (intransitive)'
 
 
 if __name__ == '__main__':
