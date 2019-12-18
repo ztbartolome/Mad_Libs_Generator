@@ -117,7 +117,7 @@ class MadLibs(object):
                     # mark the previous verb as intransitive
                     self.append_to_tag(verb_index, '-IT')
                 verb_index = i
-            elif (current_tag[:2] == 'NN' or current_tag[:2] == 'PR') and verb_index > -1:
+            elif (current_tag[:2] in {'NN', 'PP', 'DT', 'AT'}) and verb_index > -1:
                 # mark the most recent verb as transitive
                 self.append_to_tag(verb_index, '-T')
                 verb_index = -1
