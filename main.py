@@ -1,6 +1,7 @@
 from random import choice as rand
 import text_processor
 import descriptions
+import os
 
 tag_names = {'NN': 'Singular Noun'}  # dictionary with the names of each tag that we want to show the user
 
@@ -8,9 +9,9 @@ tag_names = {'NN': 'Singular Noun'}  # dictionary with the names of each tag tha
 def run():
     text_processor.train()
     print("Welcome! This program can generate mad libs for you by replacing words in a passage.")
-    choice = -1
+    choice = ''
     mad_libs = text_processor.MadLibs()
-    while choice not in ['0', '1', '2']:
+    while not choice.isnumeric() or choice != '' and int(choice) not in range(3):
         print("How would you like the mad libs to be generated?")
         print("0 - choose from available passages")
         print("1 - provide your own passage")
@@ -26,6 +27,12 @@ def run():
 
 def choose_passage():
     """Prints list of available passages and returns the text of the file the user chooses"""
+    print("Please enter the number for the passage you want to choose")
+    files = list(os.listdir('passages'))
+    for i in range(len(files)):
+        # print number, name of file, and first 50 characters of file
+        print(i, files[i], '\t', open(os.path.join('passages', files[i]), 'r').read()[:50], '...')
+
     pass
 
 
