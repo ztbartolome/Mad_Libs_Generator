@@ -64,7 +64,6 @@ class MadLibs(object):
         tagger = load_tagger()
         self.tagged_tokens = tagger.tag(self.tokenize_with_newline())
         self.determine_transitive()
-        print(self.tagged_tokens)
 
     def tokenize_with_newline(self):
         """Split raw text into tokens which are either words, punctuation, or \n"""
