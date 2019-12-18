@@ -103,7 +103,8 @@ class MadLibs(object):
         output = ''
         for i in range(len(self.replaced_tokens) - 1):
             output += self.replaced_tokens[i]
-            if self.replaced_tokens[i+1][0] not in punctuation and self.replaced_tokens[i] != '\n':
+            if self.replaced_tokens[i+1][0] not in set(punctuation).difference({'*'})\
+                    and self.replaced_tokens[i] != '\n' and self.replaced_tokens[i] != '(':
                 output += ' '
         output += self.replaced_tokens[-1]
         return output
@@ -119,7 +120,7 @@ class MadLibs(object):
                     # mark the previous verb as intransitive
                     self.append_to_tag(verb_index, '-IT')
                 verb_index = i
-            elif current_tag[:2] == 'NN' and verb_index > -1:
+            elif (current_tag[:2] == 'NN' or current_tag[:2] == 'PR') and verb_index > -1:
                 # mark the most recent verb as transitive
                 self.append_to_tag(verb_index, '-T')
                 verb_index = -1
