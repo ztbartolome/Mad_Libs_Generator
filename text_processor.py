@@ -9,6 +9,9 @@ from pickle import dump, load
 # put the tags of replaceable words here
 tags_to_replace = {'CD', 'JJ', 'JJR', 'JJS', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBR', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}
 tag_examples_dict = {'VB-T': 'examples of transitive verbs', 'VB-IT': 'examples of intransitive verbs'}
+verb_tags = {'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}
+tags_to_replace.update({tag + '-T' for tag in verb_tags})
+tags_to_replace.update({tag + '-IT' for tag in verb_tags})
 
 
 def train():
@@ -48,7 +51,7 @@ class MadLibs(object):
 
     def process_passage(self, raw_text):
         """
-        Takes a string with the raw text of a passage and removes random nouns/verbs/adjectives/adverbs,
+        Takes a string with the raw text of a passage and removes random nouns/verbs/adjectives/adverbs/interjections,
         storing each removed word and its tag
         """
         self.raw = raw_text
