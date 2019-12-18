@@ -81,7 +81,7 @@ class MadLibs(object):
         self.raw = raw_text
         self.tag_passage()
         for (token, tag) in self.tagged_tokens:
-            if tag in tags_to_replace and random() > .5:
+            if tag in tags_to_replace and random() > .6:
                 self.word_replacements[(token, tag)] = None
 
     def replace(self, replacements):
@@ -100,11 +100,12 @@ class MadLibs(object):
         """Converts replaced_tokens to a string that can be printed for the user"""
         if len(self.replaced_tokens) == 0:
             return
-        output = self.replaced_tokens[0]
-        for token in self.replaced_tokens[1:]:
-            if token not in punctuation:
+        output = ''
+        for i in range(len(self.replaced_tokens) - 1):
+            output += self.replaced_tokens[i]
+            if self.replaced_tokens[i+1][0] not in punctuation and self.replaced_tokens[i] != '\n':
                 output += ' '
-            output += token
+        output += self.replaced_tokens[-1]
         return output
 
     def determine_transitive(self):

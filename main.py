@@ -27,6 +27,7 @@ def run():
         mad_libs.process_passage(random_passage())
     tags_to_replace = [tag for (token, tag) in mad_libs.word_replacements.keys()]
     mad_libs.replace(enter_words(tags_to_replace))
+    print()
     print(mad_libs.to_string())
 
 
