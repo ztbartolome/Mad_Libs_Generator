@@ -11,7 +11,7 @@ tag_examples = None
 
 
 def run():
-    text_processor.train()
+    text_processor.load_tagger()
     make_tag_examples()
     print("Welcome! This program can generate mad libs for you by replacing words in a passage.")
     choice = ''
