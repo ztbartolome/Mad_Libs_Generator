@@ -13,7 +13,7 @@ tags_to_replace = {'CD', 'JJ', 'JJR', 'JJS', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', '
 def train():
     """Trains the tagger on the Brown corpus"""
     tagged_sents = brown.tagged_sents()
-    t0 = DefaultTagger('NN')  # last resort, tag everything left as NN
+    t0 = DefaultTagger('XX')  # last resort, tag everything left as NN
     t1 = UnigramTagger(tagged_sents, backoff=t0)  # backoff to default tagger if necessary
     t2 = BigramTagger(tagged_sents, backoff=t1)  # backoff to unigram tagger if necessary
     t3 = TrigramTagger(tagged_sents, backoff=t2)  # backoff to trigram tagger if necessary
@@ -35,21 +35,23 @@ def load_tagger():
 
 class MadLibs(object):
     def __init__(self):
-        self.raw    # may be unnecessary idk
-        self.tagged_tokens
+        self.raw = None    # may be unnecessary idk
+        self.tagged_tokens = None
         self.word_replacements = {}  # will be a dictionary of the form {(word, tag): replacement}
 
-    def tag_passage(self, passage):
+    def tag_passage(self):
         """Tag the tokens in the passage"""
         tagger = load_tagger()
-        tagger.tag(nltk.word_tokenize(passage))
+        self.tagged_tokens = tagger.tag(nltk.word_tokenize(self.raw))
+        self.determine_transitive()
 
-    def process_passage(self):
+    def process_passage(self, raw_text):
         """
         Takes a string with the raw text of a passage and removes random nouns/verbs/adjectives/adverbs,
         storing each removed word and its tag
         """
-
+        self.raw = raw_text
+        self.tag_passage()
         for (token, tag) in self.tagged_tokens:
             if tag in tags_to_replace and random() > .5:
                 self.word_replacements[(token, tag)] = None
@@ -62,7 +64,7 @@ class MadLibs(object):
             i += 1
         for token in self.tagged_tokens():
             if token in self.word_replacements:
-                # to do: replace the word with self.word_replacements[token]
+                # todo: replace the word with self.word_replacements[token]
                 pass
 
     def determine_transitive(self):
