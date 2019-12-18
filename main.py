@@ -56,8 +56,9 @@ def enter_words(tags):
         print(text_processor.tag_names[tag], end=': ')
         user_input = input()
         while user_input == 'h':
-            print('Examples of', text_processor.tag_names[tag], end=': ')
+            print('Examples', end=': ')
             print(text_processor.tag_examples[tag])
+            print(text_processor.tag_names[tag], end=': ')
             user_input = input()
         words.append(user_input)
     return words

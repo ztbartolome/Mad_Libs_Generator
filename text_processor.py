@@ -57,7 +57,7 @@ class MadLibs(object):
         self.raw = None    # may be unnecessary idk
         self.tagged_tokens = None
         self.word_replacements = {}  # will be a dictionary of the form {(word, tag): replacement}
-        self.replaced_tokens = None
+        self.replaced_tokens = []
 
     def tag_passage(self):
         """Tag the tokens in the passage"""
