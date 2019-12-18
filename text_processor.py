@@ -12,7 +12,7 @@ tags_to_replace = []    # put the tags we want to replace in here
 def train():
     """Trains the tagger on the Brown corpus"""
     tagged_sents = brown.tagged_sents()
-    t0 = DefaultTagger('NN')  # last resort, tag everything left as NN
+    t0 = DefaultTagger('XX')  # last resort, tag everything left as NN
     t1 = UnigramTagger(tagged_sents, backoff=t0)  # backoff to default tagger if necessary
     t2 = BigramTagger(tagged_sents, backoff=t1)  # backoff to unigram tagger if necessary
     t3 = TrigramTagger(tagged_sents, backoff=t2)  # backoff to trigram tagger if necessary
