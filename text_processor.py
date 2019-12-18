@@ -34,22 +34,23 @@ def load_tagger():
 
 class MadLibs(object):
     def __init__(self):
-        self.raw    # may be unnecessary idk
-        self.tagged_tokens
+        self.raw = None    # may be unnecessary idk
+        self.tagged_tokens = None
         self.word_replacements = {}  # will be a dictionary of the form {(word, tag): replacement}
 
-    def tag_passage(self, passage):
+    def tag_passage(self):
         """Tag the tokens in the passage"""
         tagger = load_tagger()
-        tagger.tag(nltk.word_tokenize(passage))
-        # todo: intransitive/transitive verb tagging
+        self.tagged_tokens = tagger.tag(nltk.word_tokenize(self.raw))
+        self.determine_transitive()
 
-    def process_passage(self):
+    def process_passage(self, raw_text):
         """
         Takes a string with the raw text of a passage and removes random nouns/verbs/adjectives/adverbs,
         storing each removed word and its tag
         """
-
+        self.raw = raw_text
+        self.tag_passage()
         for (token, tag) in self.tagged_tokens:
             if tag in tags_to_replace and random() > .5:
                 self.word_replacements[(token, tag)] = None

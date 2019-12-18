@@ -2,7 +2,8 @@ from random import choice as rand
 import text_processor
 import descriptions
 
-tag_names = {'NN':'Singular Noun'}  # dictionary with the names of each tag that we want to show the user
+tag_names = {'NN': 'Singular Noun'}  # dictionary with the names of each tag that we want to show the user
+
 
 def run():
     text_processor.train()
