@@ -26,7 +26,8 @@ def run():
     elif choice == '2':
         mad_libs.process_passage(random_passage())
     tags_to_replace = [tag for (token, tag) in mad_libs.word_replacements.keys()]
-    print(mad_libs.replace(enter_words(tags_to_replace)))
+    mad_libs.replace(enter_words(tags_to_replace))
+    print(mad_libs.to_string())
 
 
 def choose_passage():

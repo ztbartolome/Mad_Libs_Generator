@@ -43,7 +43,7 @@ class MadLibs(object):
         self.raw = None    # may be unnecessary idk
         self.tagged_tokens = None
         self.word_replacements = {}  # will be a dictionary of the form {(word, tag): replacement}
-        self.replaced_tokens = None
+        self.replaced_tokens = []
 
     def tag_passage(self):
         """Tag the tokens in the passage"""
@@ -78,10 +78,20 @@ class MadLibs(object):
             i += 1
         for orig, tag in self.tagged_tokens:
             if (orig, tag) in self.word_replacements.keys():
-                self.replaced_tokens.append(self.word_replacements[(orig, tag)])
+                self.replaced_tokens.append('*' + self.word_replacements[(orig, tag)] + '*')
             else:
                 self.replaced_tokens.append(orig)
-        return self.replaced_tokens
+
+    def to_string(self):
+        """Converts replaced_tokens to a string that can be printed for the user"""
+        if len(self.replaced_tokens == 0):
+            return
+        output = self.replaced_tokens[0]
+        for token in self.replaced_tokens[1:]:
+            if token not in punctuation:
+                output += ' '
+            output += token
+        return output
 
     def determine_transitive(self):
         """Adds '-T' or '-IT' to the end of each verb tag depending on whether it is transitive or intransitive"""
