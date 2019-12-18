@@ -8,11 +8,12 @@ from pickle import dump, load
 
 # put the tags of replaceable words here
 tags_to_replace = {'CD', 'JJ', 'JJR', 'JJS', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBR', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}
+tag_examples_dict = {'VB-T': 'examples of transitive verbs', 'VB-IT': 'examples of intransitive verbs'}
 
 
 def train():
     """Trains the tagger on the Brown corpus"""
-    tagged_sents = brown.tagged_sents()
+    tagged_sents = brown.tagged_sents(tagset='upenn_tagset')
     t0 = DefaultTagger('XX')  # last resort, tag everything left as NN
     t1 = UnigramTagger(tagged_sents, backoff=t0)  # backoff to default tagger if necessary
     t2 = BigramTagger(tagged_sents, backoff=t1)  # backoff to unigram tagger if necessary
@@ -91,5 +92,3 @@ class MadLibs(object):
     def append_to_tag(self, index, end):
         """Appends some string to the end of the tag at the given index of self.tagged_tokens"""
         self.tagged_tokens[index] = (self.tagged_tokens[index][0], self.tagged_tokens[index][1] + end)
-
-
