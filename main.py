@@ -7,11 +7,12 @@ tag_names = {'NN': 'Singular Noun'}  # dictionary with the names of each tag tha
 
 
 def run():
-    text_processor.train()
     print("Welcome! This program can generate mad libs for you by replacing words in a passage.")
+    print("Please wait... ")
+    # text_processor.train()
     choice = ''
     mad_libs = text_processor.MadLibs()
-    while (not choice.isnumeric() or choice == '') and int(choice) not in range(3):
+    while not choice.isnumeric() or choice == '' or int(choice) not in range(3):
         print("How would you like the mad libs to be generated?")
         print("0 - choose from available passages")
         print("1 - provide your own passage")
@@ -33,9 +34,9 @@ def choose_passage():
     files = list(os.listdir('passages'))
     for i in range(len(files)):
         # print number, name of file, and first 50 characters of file
-        print(i, files[i], '\t', open(os.path.join('passages', files[i]), 'r').read()[:50], '...')
+        print(i, files[i], '\t', repr(open(os.path.join('passages', files[i]), 'r').read()[:50]), '...')
     choice = ''
-    while (not choice.isnumeric() or choice == '') and int(choice) not in range(len(files)):
+    while (not choice.isnumeric() or choice == '') or int(choice) not in range(len(files)):
         choice = input('Please enter the number for the passage of your choice: ')
     return open(os.path.join('passages', files[int(choice)]), 'r').read()
 
