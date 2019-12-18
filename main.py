@@ -25,8 +25,8 @@ def run():
         mad_libs.process_passage(input("Please paste your passage:\n"))
     elif choice == '2':
         mad_libs.process_passage(random_passage())
-    else:
-        pass
+    tags_to_replace = [tag for (token, tag) in mad_libs.word_replacements.keys()]
+    print(mad_libs.replace(enter_words(tags_to_replace)))
 
 
 def choose_passage():
@@ -60,6 +60,7 @@ def enter_words(tags):
             print(text_processor.tag_examples[tag])
             user_input = input()
         words.append(user_input)
+    return words
 
 
 def make_tag_examples():
