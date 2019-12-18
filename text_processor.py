@@ -5,6 +5,8 @@ import nltk
 from nltk import DefaultTagger, BigramTagger, TrigramTagger, UnigramTagger
 from nltk.corpus import brown
 from pickle import dump, load
+import math
+import string
 
 # put the tags of replaceable words here
 tags_to_replace = {'CD', 'JJ', 'JJR', 'JJS', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBR', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}
@@ -17,7 +19,19 @@ tags_to_replace.update({tag + '-IT' for tag in verb_tags})
 
 def train():
     """Trains the tagger on the Brown corpus"""
-    tagged_sents = brown.tagged_sents(tagset='upenn_tagset')
+    brown_tagged_sents = brown.tagged_sents()
+    tagged_sents = []
+    suffixes = {'+', '$', '-'}
+    for sent_index in range(len(brown_tagged_sents)):
+        tagged_sents.append([])
+        sent = brown_tagged_sents[sent_index]
+        for word_index in range(len(sent)):
+            word, tag = sent[word_index]
+            if tag not in string.punctuation:
+                for symbol in suffixes:
+                    if symbol in tag:
+                        tag = tag[:tag.find(symbol)]
+            tagged_sents[sent_index].append((word, tag))
     t0 = DefaultTagger('XX')  # last resort, tag everything left as NN
     t1 = UnigramTagger(tagged_sents, backoff=t0)  # backoff to default tagger if necessary
     t2 = BigramTagger(tagged_sents, backoff=t1)  # backoff to unigram tagger if necessary
@@ -50,6 +64,7 @@ class MadLibs(object):
         tagger = load_tagger()
         self.tagged_tokens = tagger.tag(self.tokenize_with_newline())
         self.determine_transitive()
+        print(self.tagged_tokens)
 
     def tokenize_with_newline(self):
         """Split raw text into tokens which are either words, punctuation, or \n"""
