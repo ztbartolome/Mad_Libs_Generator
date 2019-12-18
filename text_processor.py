@@ -48,8 +48,16 @@ class MadLibs(object):
     def tag_passage(self):
         """Tag the tokens in the passage"""
         tagger = load_tagger()
-        self.tagged_tokens = tagger.tag(nltk.word_tokenize(self.raw))
+        self.tagged_tokens = tagger.tag(self.tokenize_with_newline())
         self.determine_transitive()
+
+    def tokenize_with_newline(self):
+        """Split raw text into tokens which are either words, punctuation, or \n"""
+        lines = self.raw.split('\n')
+        tokens = []
+        for line in lines:
+            tokens += nltk.word_tokenize(line) + ['\n']
+        return tokens
 
     def process_passage(self, raw_text):
         """
