@@ -29,7 +29,7 @@ def train():
                     if symbol in tag:
                         tag = tag[:tag.find(symbol)]
             tagged_sents[sent_index].append((word, tag))
-    t0 = DefaultTagger('XX')  # last resort, tag everything left as NN
+    t0 = DefaultTagger('XX')  # last resort, tag everything left as XX
     t1 = UnigramTagger(tagged_sents, backoff=t0)  # backoff to default tagger if necessary
     t2 = BigramTagger(tagged_sents, backoff=t1)  # backoff to unigram tagger if necessary
     t3 = TrigramTagger(tagged_sents, backoff=t2)  # backoff to trigram tagger if necessary
@@ -51,7 +51,7 @@ def load_tagger():
 
 class MadLibs(object):
     def __init__(self):
-        self.raw = None    # may be unnecessary idk
+        self.raw = None
         self.tagged_tokens = None
         self.word_replacements = {}  # will be a dictionary of the form {(word, tag): replacement}
         self.replaced_tokens = []

@@ -2,7 +2,6 @@ import io
 from contextlib import redirect_stdout
 from random import choice as rand
 import text_processor
-import descriptions
 import nltk
 import os
 
