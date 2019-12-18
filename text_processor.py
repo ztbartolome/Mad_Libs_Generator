@@ -1,12 +1,9 @@
 from random import random
 from string import punctuation
-
 import nltk
 from nltk import DefaultTagger, BigramTagger, TrigramTagger, UnigramTagger
 from nltk.corpus import brown
 from pickle import dump, load
-import math
-import string
 
 # put the tags of replaceable words here
 tags_to_replace = {'CD', 'JJ', 'JJR', 'JJS', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBR', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}
@@ -27,7 +24,7 @@ def train():
         sent = brown_tagged_sents[sent_index]
         for word_index in range(len(sent)):
             word, tag = sent[word_index]
-            if tag not in string.punctuation:
+            if tag not in punctuation:
                 for symbol in suffixes:
                     if symbol in tag:
                         tag = tag[:tag.find(symbol)]
