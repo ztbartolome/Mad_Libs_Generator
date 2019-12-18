@@ -1,12 +1,35 @@
 from random import random
 from string import punctuation
 
+import nltk
+from nltk import DefaultTagger, BigramTagger, TrigramTagger, UnigramTagger
+from nltk.corpus import brown
+from pickle import dump, load
 
 tags_to_replace = []    # put the tags we want to replace in here
 
+
 def train():
     """Trains the tagger on the Brown corpus"""
-    pass
+    tagged_sents = brown.tagged_sents()
+    t0 = DefaultTagger('NN')  # last resort, tag everything left as NN
+    t1 = UnigramTagger(tagged_sents, backoff=t0)  # backoff to default tagger if necessary
+    t2 = BigramTagger(tagged_sents, backoff=t1)  # backoff to unigram tagger if necessary
+    t3 = TrigramTagger(tagged_sents, backoff=t2)  # backoff to trigram tagger if necessary
+    tagger_output = open('pos_tagger_brown.pkl', 'wb')
+    dump(t3, tagger_output, -1)
+    tagger_output.close()
+    return t3
+
+
+def load_tagger():
+    try:
+        tagger_input = open('pos_tagger_brown.pkl', 'rb')
+    except FileNotFoundError:
+        return train()
+    tagger = load(tagger_input)
+    tagger_input.close()
+    return tagger
 
 
 class MadLibs(object):
@@ -15,9 +38,10 @@ class MadLibs(object):
         self.tagged_tokens
         self.word_replacements = {}  # will be a dictionary of the form {(word, tag): replacement}
 
-    def tag_passage(self):
+    def tag_passage(self, passage):
         """Tag the tokens in the passage"""
-        pass
+        tagger = load_tagger()
+        tagger.tag(nltk.word_tokenize(passage))
 
     def process_passage(self):
         """
