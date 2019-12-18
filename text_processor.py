@@ -41,6 +41,7 @@ class MadLibs(object):
         """Tag the tokens in the passage"""
         tagger = load_tagger()
         tagger.tag(nltk.word_tokenize(passage))
+        # todo: intransitive/transitive verb tagging
 
     def process_passage(self):
         """
@@ -60,5 +61,5 @@ class MadLibs(object):
             i += 1
         for token in self.tagged_tokens():
             if token in self.word_replacements:
-                # to do: replace the word with self.word_replacements[token]
+                # todo: replace the word with self.word_replacements[token]
                 pass
