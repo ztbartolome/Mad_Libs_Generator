@@ -6,7 +6,8 @@ from nltk import DefaultTagger, BigramTagger, TrigramTagger, UnigramTagger
 from nltk.corpus import brown
 from pickle import dump, load
 
-tags_to_replace = []    # put the tags we want to replace in here
+# put the tags of replaceable words here
+tags_to_replace = {'CD', 'JJ', 'JJR', 'JJS', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBR', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}
 
 
 def train():
@@ -66,10 +67,6 @@ class MadLibs(object):
 
     def determine_transitive(self):
         """Adds '-T' or '-IT' to the end of each verb tag depending on whether it is transitive or intransitive"""
-        # for (token, tag) in self.tagged_tokens:
-        #     transitive =
-        #     if tag[:2] == 'VB':
-
         i = 0
         verb_index = -1
         while i < len(self.tagged_tokens):
