@@ -6,7 +6,7 @@ import descriptions
 import nltk
 import os
 
-tag_names = {'NN': 'Singular Noun'}  # dictionary with the names of each tag that we want to show the user
+tag_names = {}  # dictionary with the names of each tag that we want to show the user
 tag_examples = None
 
 
