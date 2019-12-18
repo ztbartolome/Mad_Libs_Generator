@@ -22,13 +22,24 @@ def run():
     if choice == '0':
         mad_libs.process_passage(choose_passage())
     elif choice == '1':
-        mad_libs.process_passage(input("Please paste your passage:\n"))
+        mad_libs.process_passage(input_passage())
     elif choice == '2':
         mad_libs.process_passage(random_passage())
     tags_to_replace = [tag for (token, tag) in mad_libs.word_replacements.keys()]
     mad_libs.replace(enter_words(tags_to_replace))
     print()
     print(mad_libs.to_string())
+
+
+def input_passage():
+    """Lets the user input their own passage with multiple lines and enter END to end"""
+    print("Please paste your passage, followed by 'END' on a new line")
+    lines = []
+    line = input()
+    while line != 'END':
+        lines.append(line)
+        line = input()
+    return '\n'.join(lines)
 
 
 def choose_passage():
