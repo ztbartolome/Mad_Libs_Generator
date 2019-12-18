@@ -11,7 +11,7 @@ def run():
     print("Welcome! This program can generate mad libs for you by replacing words in a passage.")
     choice = ''
     mad_libs = text_processor.MadLibs()
-    while not choice.isnumeric() or choice != '' and int(choice) not in range(3):
+    while (not choice.isnumeric() or choice == '') and int(choice) not in range(3):
         print("How would you like the mad libs to be generated?")
         print("0 - choose from available passages")
         print("1 - provide your own passage")
@@ -21,19 +21,29 @@ def run():
         mad_libs.process_passage(choose_passage())
     elif choice == '1':
         mad_libs.process_passage(input("Please paste your passage:\n"))
+    elif choice == '2':
+        mad_libs.process_passage(random_passage())
     else:
         pass
 
 
 def choose_passage():
     """Prints list of available passages and returns the text of the file the user chooses"""
-    print("Please enter the number for the passage you want to choose")
+    print("Here are the available passages:")
     files = list(os.listdir('passages'))
     for i in range(len(files)):
         # print number, name of file, and first 50 characters of file
         print(i, files[i], '\t', open(os.path.join('passages', files[i]), 'r').read()[:50], '...')
+    choice = ''
+    while (not choice.isnumeric() or choice == '') and int(choice) not in range(len(files)):
+        choice = input('Please enter the number for the passage of your choice: ')
+    return open(os.path.join('passages', files[int(choice)]), 'r').read()
 
-    pass
+
+def random_passage():
+    """Returns the text of a random passage from the passages folder"""
+    files = list(os.path.join('passages', filename) for filename in os.listdir('passages'))
+    return open(rand(files), 'r').read()
 
 
 def enter_words(tags):
