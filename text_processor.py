@@ -98,7 +98,7 @@ class MadLibs(object):
 
     def to_string(self):
         """Converts replaced_tokens to a string that can be printed for the user"""
-        if len(self.replaced_tokens == 0):
+        if len(self.replaced_tokens) == 0:
             return
         output = self.replaced_tokens[0]
         for token in self.replaced_tokens[1:]:
