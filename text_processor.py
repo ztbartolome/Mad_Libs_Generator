@@ -1,5 +1,5 @@
 from random import random
-from string import punctuation
+import string
 import nltk
 from nltk import DefaultTagger, BigramTagger, TrigramTagger, UnigramTagger
 from nltk.corpus import brown
@@ -12,23 +12,27 @@ tag_names = dict()
 verb_tags = {'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}
 tags_to_replace.update({tag + '-T' for tag in verb_tags})
 tags_to_replace.update({tag + '-IT' for tag in verb_tags})
+punctuation = set(string.punctuation).difference('*', '`')
 
 
 def train():
     """Trains the tagger on the Brown corpus"""
+    # convert from brown tagset to upenn tagset
     brown_tagged_sents = brown.tagged_sents()
     tagged_sents = []
     suffixes = {'+', '$', '-'}
-    for sent_index in range(len(brown_tagged_sents)):
+    brown_to_upenn = {'JJT': 'JJS', 'PN': 'PRP', 'PP': 'PRP', 'RBT': 'RBS', 'NP': 'NNP'}
+    for sent in brown_tagged_sents:
         tagged_sents.append([])
-        sent = brown_tagged_sents[sent_index]
-        for word_index in range(len(sent)):
-            word, tag = sent[word_index]
+        for word, tag in sent:
             if tag not in punctuation:
                 for symbol in suffixes:
                     if symbol in tag:
                         tag = tag[:tag.find(symbol)]
-            tagged_sents[sent_index].append((word, tag))
+                for brown_tag in brown_to_upenn.keys():
+                    if tag.startswith(brown_tag):
+                        tag = brown_to_upenn[brown_tag]
+            tagged_sents[-1].append((word, tag))
     t0 = DefaultTagger('XX')  # last resort, tag everything left as XX
     t1 = UnigramTagger(tagged_sents, backoff=t0)  # backoff to default tagger if necessary
     t2 = BigramTagger(tagged_sents, backoff=t1)  # backoff to unigram tagger if necessary
@@ -99,8 +103,12 @@ class MadLibs(object):
             return
         output = ''
         for i in range(len(self.replaced_tokens) - 1):
-            output += self.replaced_tokens[i]
-            if self.replaced_tokens[i+1][0] not in set(punctuation).difference({'*'})\
+            if self.replaced_tokens[i] == '\'\'' or self.replaced_tokens[i] == '``':
+                output += '"'
+            else:
+                output += self.replaced_tokens[i]
+            if self.replaced_tokens[i+1][0] not in punctuation\
+                    and self.replaced_tokens[i+1] != 'n\'t' and self.replaced_tokens[i] != '``'\
                     and self.replaced_tokens[i] != '\n' and self.replaced_tokens[i] != '(':
                 output += ' '
         output += self.replaced_tokens[-1]
@@ -117,7 +125,7 @@ class MadLibs(object):
                     # mark the previous verb as intransitive
                     self.append_to_tag(verb_index, '-IT')
                 verb_index = i
-            elif (current_tag[:2] in {'NN', 'PP', 'DT', 'AT'}) and verb_index > -1:
+            elif (current_tag[:2] in {'NN', 'PR', 'DT', 'AT'}) and verb_index > -1:
                 # mark the most recent verb as transitive
                 self.append_to_tag(verb_index, '-T')
                 verb_index = -1
