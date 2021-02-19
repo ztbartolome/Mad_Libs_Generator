@@ -2,14 +2,14 @@
 
 {% block content %}
     <h2>Choose from available passages</h2>
-<!--
-    choose from these passages
-        redo main.choose_passage
-    or choose a random passage
-    or enter your own
-        textarea
--->
+    <ul>
+        {% for filename in state['files'] %}
+            <li><a href="{{url_for('enter_words', type=loop.index-1)}}">{{filename}}</a></li>
+        {% endfor %}
+    </ul>
     <h2>Or choose randomly!</h2>
+    <a href="{{url_for('enter_words', type='random')}}"><button type="button">Surprise me!</button></a>
+
     <h2>Or enter your own...</h2>
     <form method="post" action="/enterwords">
         <textarea name="passage"></textarea>

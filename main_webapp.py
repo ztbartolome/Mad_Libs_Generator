@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, redirect, request
 import main
 import text_processor
 import os
@@ -6,15 +6,18 @@ app = Flask(__name__)
 
 global state
 state = {'mad_libs':None,
-'tags_to_replace':[]}
+'tags_to_replace':[],
+'files':list(os.listdir('passages'))}
 
 #home page with menu for mad libs
 @app.route('/')
 def home():
+    global state
+    state['files'] = list(os.listdir('passages'))
     text_processor.load_tagger()
     main.make_tag_examples()
     state['mad_libs'] = text_processor.MadLibs()
-    return render_template('home.html')
+    return render_template('home.html', state=state)
 
 @app.route('/about')
 def about():
@@ -29,8 +32,8 @@ def enter_words():
         passage_type = request.args.get('type')
         if passage_type == 'random':
             passage = main.random_passage()
-        else:
-            passage = open(os.path.join('passages', files[int(passage_type)]), 'r').read()
+        else:   #the 'type' corresponds to index of file to be read
+            passage = open(os.path.join('passages', state['files'][int(passage_type)]), 'r').read()
     elif request.method == 'POST': #user submitted their own passage
         passage = request.form['passage']
     state['mad_libs'].process_passage(passage)
