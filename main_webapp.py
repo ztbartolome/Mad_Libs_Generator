@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, request
+from random import choice as rand
 import main
 import text_processor
 import os
@@ -32,7 +33,7 @@ def enter_words():
     if request.method == 'GET': #sent to this page from passage selection
         passage_type = request.args.get('type')
         if passage_type == 'random':
-            passage = main.random_passage()
+            passage = open(os.path.join(state['passage_dir'], rand(state['files'])), 'r').read()
         else:   #the 'type' corresponds to index of file to be read
             passage = open(os.path.join(state['passage_dir'], state['files'][int(passage_type)]), 'r').read()
     elif request.method == 'POST': #user submitted their own passage
