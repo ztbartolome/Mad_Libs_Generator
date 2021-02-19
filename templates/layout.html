@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <!--
+    <link rel="stylesheet" href="style.css" />
+    -->
+    <title>{% block title %}Mad Libs Generator{% endblock %}</title>
+    <style>
+        .result {white-space: pre-line;}
+    </style>
+    {% endblock %}
+</head>
+<body>
+    <h1>Mad Libs Generator</h1>
+	<div class="text-center">
+        <a class="btn btn-primary" href="/">Home</a>
+        <a class="btn btn-primary" href="/about">About</a>
+    </div>
+    <div class="container" id="content">
+		{% block content %}{% endblock %}
+	</div>
+</body>
+</html>

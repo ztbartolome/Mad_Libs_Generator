@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <form method="post" action="/result">
+        {% for tag in state['tags_to_replace'] %}
+            {{tag}}: <input type="text" name="replacements[]">
+            <br>
+        {% endfor %}
+        <input type="submit">
+    </form>
+
+{% endblock %}

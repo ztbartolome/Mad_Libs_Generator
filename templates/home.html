@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Choose from available passages</h2>
+<!--
+    choose from these passages
+        redo main.choose_passage
+    or choose a random passage
+    or enter your own
+        textarea
+-->
+    <h2>Or choose randomly!</h2>
+    <h2>Or enter your own...</h2>
+    <form method="post" action="/enterwords">
+        <textarea name="passage"></textarea>
+        <br>
+        <input type="submit">
+    </form>
+{% endblock %}
