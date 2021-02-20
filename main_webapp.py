@@ -8,14 +8,16 @@ app = Flask(__name__)
 global state
 state = {'mad_libs':None,
 'tags_to_replace':[],
-'passage_dir':os.path.join(os.path.dirname(os.path.abspath(__file__)), 'passages'),
-'files':None}
+'passage_dir':os.path.join(os.path.dirname(os.path.abspath(__file__)), 'passages'), #absolute path of passages folder
+'filenames':[],
+'file_previews':[]}
 
 #home page with menu for mad libs
 @app.route('/')
 def home():
     global state
-    state['files'] = list(os.listdir(state['passage_dir']))
+    state['filenames'] = list(os.listdir(state['passage_dir']))
+    state['file_previews'] = [open(os.path.join(state['passage_dir'], f), 'r').read()[:50]+'...' for f in state['filenames']]
     text_processor.load_tagger()
     main.make_tag_examples()
     state['mad_libs'] = text_processor.MadLibs()
@@ -33,9 +35,9 @@ def enter_words():
     if request.method == 'GET': #sent to this page from passage selection
         passage_type = request.args.get('type')
         if passage_type == 'random':
-            passage = open(os.path.join(state['passage_dir'], rand(state['files'])), 'r').read()
+            passage = open(os.path.join(state['passage_dir'], rand(state['filenames'])), 'r').read()
         else:   #the 'type' corresponds to index of file to be read
-            passage = open(os.path.join(state['passage_dir'], state['files'][int(passage_type)]), 'r').read()
+            passage = open(os.path.join(state['passage_dir'], state['filenames'][int(passage_type)]), 'r').read()
     elif request.method == 'POST': #user submitted their own passage
         passage = request.form['passage']
     state['mad_libs'].process_passage(passage)

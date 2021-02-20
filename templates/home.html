@@ -3,10 +3,16 @@
 {% block content %}
     <h2>Choose from available passages</h2>
     <ul>
-        {% for filename in state['files'] %}
-            <li><a href="{{url_for('enter_words', type=loop.index-1)}}">{{filename}}</a></li>
+        {% for filename in state['filenames'] %}
+            <li>
+                <a href="{{url_for('enter_words', type=loop.index-1)}}">{{filename}}</a>
+                <div class="preview">
+                    {{state['file_previews'][loop.index-1]}}
+                </div>
+            </li>
         {% endfor %}
     </ul>
+
     <h2>Or choose randomly!</h2>
     <a href="{{url_for('enter_words', type='random')}}"><button type="button">Surprise me!</button></a>
 
