@@ -10,7 +10,9 @@ state = {'mad_libs':None,
 'tags_to_replace':[],
 'passage_dir':os.path.join(os.path.dirname(os.path.abspath(__file__)), 'passages'), #absolute path of passages folder
 'filenames':[],
-'file_previews':[]}
+'file_previews':[],
+'tag_examples':dict(),
+'tag_names':dict()}
 
 #home page with menu for mad libs
 @app.route('/')
@@ -20,6 +22,8 @@ def home():
     state['file_previews'] = [open(os.path.join(state['passage_dir'], f), 'r').read()[:50]+'...' for f in state['filenames']]
     text_processor.load_tagger()
     main.make_tag_examples()
+    state['tag_examples'] = text_processor.tag_examples
+    state['tag_names'] = text_processor.tag_names
     state['mad_libs'] = text_processor.MadLibs()
     return render_template('home.html', state=state)
 
@@ -41,10 +45,10 @@ def enter_words():
     elif request.method == 'POST': #user submitted their own passage
         passage = request.form['passage']
     state['mad_libs'].process_passage(passage)
-    state['tags_to_replace'] = [text_processor.tag_names[tag] for (token, tag) in state['mad_libs'].word_replacements.keys()]
+    state['tags_to_replace'] = [tag for (token, tag) in state['mad_libs'].word_replacements.keys()]
     return render_template('enter_words.html', state=state)
 
-#show the mad lib with the word replacements
+#show the finished mad lib with the word replacements
 @app.route('/result', methods=['POST'])
 def result():
     global state
