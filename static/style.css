@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.result {white-space: pre-line;}
+
+h1 {
+    color:dodgerblue;
+    margin: 20px;
+}
+
+.content > *{
+    margin: 20px;
+}
+
+#navbar {
+    top: 0;
+    position: sticky;
+    background-color: darkblue;
+}
+
+#navbar li{
+    display:inline-block;
+}
+
+#navbar li:hover{
+    background-color: black;
+}
+
+#navbar a {
+    text-decoration: none;
+    color:white;
+    padding: 20px 30px 20px 30px;
+    display: inline-block;
+}

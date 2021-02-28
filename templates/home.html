@@ -1,25 +1,28 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h2>Choose from available passages</h2>
-    <ul>
-        {% for filename in state['filenames'] %}
-            <li>
-                <a href="{{url_for('enter_words', type=loop.index-1)}}">{{filename}}</a>
-                <div class="preview">
-                    {{state['file_previews'][loop.index-1]}}
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="content">
+        <p>Welcome! This is a Mad Libs generator based on the game Mad Libs in which one person prompts others to fill in the blanks of a passage according to parts of speech. This generator randomly takes out words from a passage for the user to replace.</p>
+        <h3>Choose from available passages</h3>
+        <ul>
+            {% for filename in state['filenames'] %}
+                <li>
+                    <a href="{{url_for('enter_words', type=loop.index-1)}}">{{filename}}</a>
+                    <div class="preview">
+                        {{state['file_previews'][loop.index-1]}}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
 
-    <h2>Or choose randomly!</h2>
-    <a href="{{url_for('enter_words', type='random')}}"><button type="button">Surprise me!</button></a>
+        <h3>Or choose randomly!</h3>
+        <a href="{{url_for('enter_words', type='random')}}"><button type="button">Surprise me!</button></a>
 
-    <h2>Or enter your own...</h2>
-    <form method="post" action="/enterwords">
-        <textarea name="passage"></textarea>
-        <br>
-        <input type="submit">
-    </form>
+        <h3>Or enter your own...</h3>
+        <form method="post" action="/enterwords">
+            <textarea name="passage"></textarea>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
 {% endblock %}

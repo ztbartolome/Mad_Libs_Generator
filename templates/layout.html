@@ -2,13 +2,8 @@
 <html lang="en">
 <head>
     {% block head %}
-    <!--
-    <link rel="stylesheet" href="style.css" />
-    -->
     <title>{% block title %}Mad Libs Generator{% endblock %}</title>
-    <style>
-        .result {white-space: pre-line;}
-    </style>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
     <script>
         function toggleDisplay(id){
             var elmt = document.getElementById(id);
@@ -26,10 +21,10 @@
 </head>
 <body>
     <h1>Mad Libs Generator</h1>
-	<div class="navbar">
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-    </div>
+	<ul id="navbar">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+    </ul>
     <div class="container" id="content">
 		{% block content %}{% endblock %}
 	</div>
