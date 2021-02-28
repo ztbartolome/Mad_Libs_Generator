@@ -3,21 +3,38 @@
     padding: 0;
 }
 
-.result {white-space: pre-line;}
-
-h1 {
+h1 a {
     color:dodgerblue;
-    margin: 20px;
+    text-decoration: none;
 }
 
-.content > *{
-    margin: 20px;
+h1, p, .content > *{
+    margin: 15px;
+}
+
+ul {list-style-type:none;}
+
+.content li {
+    margin: 5px 0;
+}
+
+.result {white-space: pre-line;}
+
+#menu {
+    text-align: center;
 }
 
 #navbar {
-    top: 0;
-    position: sticky;
     background-color: darkblue;
+    position: sticky;
+    top: 0;
+}
+
+#navbar a {
+    color:white;
+    display: inline-block;
+    padding: 20px 30px 20px 30px;
+    text-decoration: none;
 }
 
 #navbar li{
@@ -26,11 +43,4 @@ h1 {
 
 #navbar li:hover{
     background-color: black;
-}
-
-#navbar a {
-    text-decoration: none;
-    color:white;
-    padding: 20px 30px 20px 30px;
-    display: inline-block;
 }

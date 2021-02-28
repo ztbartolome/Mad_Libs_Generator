@@ -1,16 +1,22 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <form method="post" action="/result">
-        {% for tag in state['tags_to_replace'] %}
-            {{state['tag_names'][tag]}}: <input type="text" name="replacements[]">
-            <button id="{{loop.index~'button'}}" type="button" onclick="toggleDisplay({{loop.index}})">Show examples</button>
-            <div style="display:none" class="examples" id="{{loop.index}}">
-                Examples: {{state['tag_examples'][tag]}}
-            </div>
-            <br>
-        {% endfor %}
-        <input type="submit">
-    </form>
+    <div class="content">
+        <form method="post" action="/result">
+            <ul>
+            {% for tag in state['tags_to_replace'] %}
+                <li>
+                    {{state['tag_names'][tag]}}: <input type="text" name="replacements[]">
+                    <button id="{{loop.index~'button'}}" type="button" onclick="toggleDisplay({{loop.index}})">Show examples</button>
+                    <div style="display:none" class="examples" id="{{loop.index}}">
+                        Examples: {{state['tag_examples'][tag]}}
+                    </div>
+                    <br>
+                </li>
+            {% endfor %}
+            </ul>
+            <input type="submit">
+        </form>
+    </div>
 
 {% endblock %}

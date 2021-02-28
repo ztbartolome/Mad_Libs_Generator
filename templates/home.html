@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div class="content">
-        <p>Welcome! This is a Mad Libs generator based on the game Mad Libs in which one person prompts others to fill in the blanks of a passage according to parts of speech. This generator randomly takes out words from a passage for the user to replace.</p>
+    <p>Welcome! This is a Mad Libs generator based on the game Mad Libs in which one person prompts others to fill in the blanks of a passage according to parts of speech. This generator randomly takes out words from a passage for the user to replace.</p>
+    <div class="content" id="menu">
         <h3>Choose from available passages</h3>
         <ul>
             {% for filename in state['filenames'] %}
