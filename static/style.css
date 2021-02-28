@@ -18,7 +18,10 @@ ul {list-style-type:none;}
     margin: 5px 0;
 }
 
-.result {white-space: pre-line;}
+#result {
+    margin: 0 15px;
+    white-space: pre-line;
+}
 
 #menu {
     text-align: center;
